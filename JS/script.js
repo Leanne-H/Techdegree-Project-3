@@ -178,25 +178,31 @@ input as stated in the project instructions */1 === 1) {
 
 function formValidation() {
   if (paymentMethod.value === "credit card") {
-    if (validateName === true && validateEmail === true && validateActivitySection === true && validateCreditCardNo === true && validateZipCode === true && validateCVV === true) {
-      //
+    if (validateName() && validateEmail() && validateActivitySection() && validateCreditCardNo() && validateZipCode() && validateCVV()) {
+      console.log("form validate 1");
       return true;
     }
   } else if (paymentMethod.value === "paypal" || paymentMethod.value === "bitcoin") {
-    if (validateName === true && validateEmail === true && validateActivitySection === true) {
-      //
+    if (validateName() && validateEmail() && validateActivitySection()) {
+      console.log("form validate 2");
       return true;
     }
   } else {
+    console.log("form validate 3");
     return false;
   }
 }
 
+//formValidation();
 
-// !! NOTE TO SELF CHECK CODE BELOW !!
+const registerButton = document.querySelector('button[type=submit]');
 
 const form = document.querySelector('form');
 form.addEventListener('submit', () => {
-  console.log("validation on");
-  formValidation();
+  if (formValidation()) {
+    event.preventDefault();
+    console.log("let's go");
+  } else {
+    event.preventDefault();
+  }
 });
