@@ -103,106 +103,189 @@ paymentMethod.addEventListener('change', (e) => {
   }
 });
 
+// Styling of error messages
+function alert () {
+  let alertImage = document.createElement('span');
+  let image = `           <img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/20924305121543238852-512.png" alt="icon of exclamation mark inside triangle" width= "20" height="20">`;
+  alertImage.innerHTML = image;
+  return alertImage;
+}
 
-/* A common error indicator for an invalid field is to turn the input or form
-section’s border red. But an even better approach is to append an element to
-the DOM near the input or section, give it some friendly error message, and
-show it when the field is invalid, and hide it when the field is valid.
-*/
+function errorMessageStyling(incorrectInput) {
+  if (incorrectInput.children.length === 0) {
+    incorrectInput.appendChild(alert());
+  }
+  incorrectInput.style.color = "red";
+  incorrectInput.hidden = false;
+  return true;
+}
+
+// Regular expressions to test validity
+// 1. Name input field
+const nameRegex = /\S/;
+const nameInput = document.getElementById('name');
+let nameLabel = document.querySelector('label[for=name]');
+let validateMessageName = document.createElement('p');
+nameLabel.appendChild(validateMessageName);
+validateMessageName.hidden = true;
+validateMessageName.textContent = `Please fill out your name. The field must contain at least one character.`;
+
 function validateName() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageName.hidden = true;
+  if (nameRegex.test(nameInput.value)) {
+    nameInput.style.border = "none";
+    validateMessageName.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageName.hidden = false;
+    nameInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageName);
     return false;
   }
 }
 
+// 2. Email input field
+const emailRegex = /^[^@.]+\@[^.@]+\.[a-z]+$/i;
+const emailInput = document.getElementById('mail');
+let emailLabel = document.querySelector('label[for=mail]');
+let validateMessageEmail = document.createElement('p');
+emailLabel.appendChild(validateMessageEmail);
+validateMessageEmail.hidden = true;
+validateMessageEmail.textContent = `Please fill out a valid emailaccount (for example: name@monkey.com)`;
 
 function validateEmail() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageEmail.hidden = true;
+  if (emailRegex.test(emailInput.value)) {
+    emailInput.style.border = "none";
+    validateMessageEmail.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageEmail.hidden = false;
+    emailInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageEmail);
     return false;
   }
 }
+
+// 3. Activity input field
+let validateMessageActivity = document.createElement('span');
+activSection.appendChild(validateMessageActivity);
+validateMessageActivity.hidden = true;
+validateMessageActivity.textContent = `Please select at least one activity`;
 
 function validateActivitySection() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageActivity.hidden = true;
+  let counter = 0;
+  for (let i = 0; i < activityList.length; i++) {
+    if (activityList[i].checked) {
+      console.log(counter);
+      counter =+ 1;
+    }
+  }
+  if (counter >= 1) {
+    validateMessageActivity.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageActivity.hidden = false;
+    errorMessageStyling(validateMessageActivity);
     return false;
   }
 }
+
+// 4. Creditcard input fields
+const creditNumRegex = /^\d{13}\d?\d?\d?$/;
+const creditNumInput = document.getElementById('cc-num');
+let creditNumLabel = document.querySelector('label[for=cc-num]');
+let validateMessageCreditNum = document.createElement('p');
+creditNumLabel.appendChild(validateMessageCreditNum);
+validateMessageCreditNum.hidden = true;
+validateMessageCreditNum.textContent = `Please fill out a 13 to 16 digit combination.`;
 
 function validateCreditCardNo() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageCreditNum.hidden = true;
+  if (creditNumRegex.test(creditNumInput.value)) {
+    creditNumInput.style.border = "none";
+    validateMessageCreditNum.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageCreditNum.hidden = false;
+    creditNumInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageCreditNum);
     return false;
   }
 }
+
+const zipCodeRegex = /^\d{5}$/;
+const zipCodeInput = document.getElementById('zip');
+let zipCodeLabel = document.querySelector('label[for=zip]');
+let validateMessageZipCode = document.createElement('p');
+zipCodeLabel.appendChild(validateMessageZipCode);
+validateMessageZipCode.hidden = true;
+validateMessageZipCode.textContent = `Please fill out a 5 digit number.`;
 
 function validateZipCode() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageZipCode.hidden = true;
+  if (zipCodeRegex.test(zipCodeInput.value)) {
+    zipCodeInput.style.border = "none";
+    validateMessageZipCode.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageZipCode.hidden = false;
+    zipCodeInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageZipCode);
     return false;
   }
 }
+
+const cvvRegex = /^\d{3}$/;
+const cvvInput = document.getElementById('cvv');
+let cvvLabel = document.querySelector('label[for=cvv]');
+let validateMessageCVV = document.createElement('p');
+cvvLabel.appendChild(validateMessageCVV);
+validateMessageCVV.hidden = true;
+validateMessageCVV.textContent = `Please fill out a 3 digit number.`;
 
 function validateCVV() {
-  if (/* the input value meets the requirements for that
-input as stated in the project instructions */1 === 1) {
-    // remove any error indicators
+  validateMessageCVV.hidden = true;
+  if (cvvRegex.test(cvvInput.value)) {
+    cvvInput.style.border = "none";
+    validateMessageCVV.hidden = true;
     return true;
   } else {
-    //add an error indicator
+    validateMessageCVV.hidden = false;
+    cvvInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageCVV);
     return false;
   }
 }
 
+// Overall validity check
 function formValidation() {
   if (paymentMethod.value === "credit card") {
     if (validateName() && validateEmail() && validateActivitySection() && validateCreditCardNo() && validateZipCode() && validateCVV()) {
-      console.log("form validate 1");
       return true;
     }
   } else if (paymentMethod.value === "paypal" || paymentMethod.value === "bitcoin") {
     if (validateName() && validateEmail() && validateActivitySection()) {
-      console.log("form validate 2");
       return true;
     }
+  } else if (paymentMethod.value === "select method") {
+    validateName();
+    validateEmail();
+    validateActivitySection();
+    validateCreditCardNo();
+    validateZipCode();
+    validateCVV();
+    return false;
   } else {
-    console.log("form validate 3");
     return false;
   }
 }
 
-//formValidation();
-
-const registerButton = document.querySelector('button[type=submit]');
-
+// Submit event initiates validation 
 const form = document.querySelector('form');
 form.addEventListener('submit', () => {
-  if (formValidation()) {
-    event.preventDefault();
-    console.log("let's go");
-  } else {
+  if (!formValidation()) {
     event.preventDefault();
   }
 });
