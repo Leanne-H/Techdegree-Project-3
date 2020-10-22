@@ -1,5 +1,18 @@
+/******************************************
+Treehouse FSJS Techdegree:
+project 3 - Creating a submission form with validation measures
+******************************************/
+
+/*
+  The code below lets users interact with the submission form on the web page. It checks the validity of the web
+  users answers and -if necessary- tells the web user how to improve the input as to satisfy the validity check.
+
+  If something is unclear in this code, please contact me.
+*/
+
 document.getElementById("name").focus();
 
+// If user selects 'other job', a designated input-bar appears
 const otherJobInput = document.getElementById("other-title");
 otherJobInput.style.display = "none";
 const otherJob = document.getElementById("title");
@@ -18,9 +31,7 @@ const colorList = document.getElementById("color");
 colorList.add(selectTheme, 0);
 selectTheme.selected = true;
 selectTheme.hidden = true;
-
 colorList.hidden = true;
-
 
 const design = document.getElementById("design");
 design.addEventListener('change', () => {
@@ -105,8 +116,8 @@ paymentMethod.addEventListener('change', (e) => {
 
 // Styling of error messages
 function alert () {
-  let alertImage = document.createElement('span');
-  let image = `           <img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/20924305121543238852-512.png" alt="icon of exclamation mark inside triangle" width= "20" height="20">`;
+  const alertImage = document.createElement('span');
+  const image = `           <img src="https://upload-icon.s3.us-east-2.amazonaws.com/uploads/icons/png/20924305121543238852-512.png" alt="icon of exclamation mark inside triangle" width= "20" height="20">`;
   alertImage.innerHTML = image;
   return alertImage;
 }
@@ -125,7 +136,7 @@ function errorMessageStyling(incorrectInput) {
 const nameRegex = /\S/;
 const nameInput = document.getElementById('name');
 let nameLabel = document.querySelector('label[for=name]');
-let validateMessageName = document.createElement('p');
+const validateMessageName = document.createElement('p');
 nameLabel.appendChild(validateMessageName);
 validateMessageName.hidden = true;
 validateMessageName.textContent = `Please fill out your name. The field must contain at least one character.`;
@@ -144,14 +155,22 @@ function validateName() {
   }
 }
 
+nameInput.addEventListener('keyup', (e) => {
+  validateName(e.target.value);
+});
+
 // 2. Email input field
 const emailRegex = /^[^@.]+\@[^.@]+\.[a-z]+$/i;
+const emailRegexShort = /^[^@.]+$/;
+
 const emailInput = document.getElementById('mail');
 let emailLabel = document.querySelector('label[for=mail]');
-let validateMessageEmail = document.createElement('p');
+const validateMessageEmail = document.createElement('p');
 emailLabel.appendChild(validateMessageEmail);
 validateMessageEmail.hidden = true;
-validateMessageEmail.textContent = `Please fill out a valid emailaccount (for example: name@monkey.com)`;
+const text = `Please fill out a valid emailaccount (for example: name@monkey.com)`;
+const textShort = `Please fill out a valid emailaccount (must contain an @-sign and a dot)`
+validateMessageEmail.textContent = "";
 
 function validateEmail() {
   validateMessageEmail.hidden = true;
@@ -159,7 +178,14 @@ function validateEmail() {
     emailInput.style.border = "none";
     validateMessageEmail.hidden = true;
     return true;
+  } else if (emailRegexShort.test(emailInput.value)) {
+    validateMessageEmail.textContent = textShort;
+    validateMessageEmail.hidden = false;
+    emailInput.style.border = "3px solid red";
+    errorMessageStyling(validateMessageEmail);
+    return false;
   } else {
+    validateMessageEmail.textContent = text;
     validateMessageEmail.hidden = false;
     emailInput.style.border = "3px solid red";
     errorMessageStyling(validateMessageEmail);
@@ -167,8 +193,12 @@ function validateEmail() {
   }
 }
 
+emailInput.addEventListener('keyup', (e) => {
+  validateEmail(e.target.value);
+});
+
 // 3. Activity input field
-let validateMessageActivity = document.createElement('span');
+const validateMessageActivity = document.createElement('span');
 activSection.appendChild(validateMessageActivity);
 validateMessageActivity.hidden = true;
 validateMessageActivity.textContent = `Please select at least one activity`;
@@ -196,7 +226,7 @@ function validateActivitySection() {
 const creditNumRegex = /^\d{13}\d?\d?\d?$/;
 const creditNumInput = document.getElementById('cc-num');
 let creditNumLabel = document.querySelector('label[for=cc-num]');
-let validateMessageCreditNum = document.createElement('p');
+const validateMessageCreditNum = document.createElement('p');
 creditNumLabel.appendChild(validateMessageCreditNum);
 validateMessageCreditNum.hidden = true;
 validateMessageCreditNum.textContent = `Please fill out a 13 to 16 digit combination.`;
@@ -215,10 +245,15 @@ function validateCreditCardNo() {
   }
 }
 
+creditNumInput.addEventListener('keyup', (e) => {
+  validateCreditCardNo(e.target.value);
+});
+
+
 const zipCodeRegex = /^\d{5}$/;
 const zipCodeInput = document.getElementById('zip');
 let zipCodeLabel = document.querySelector('label[for=zip]');
-let validateMessageZipCode = document.createElement('p');
+const validateMessageZipCode = document.createElement('p');
 zipCodeLabel.appendChild(validateMessageZipCode);
 validateMessageZipCode.hidden = true;
 validateMessageZipCode.textContent = `Please fill out a 5 digit number.`;
@@ -237,10 +272,14 @@ function validateZipCode() {
   }
 }
 
+zipCodeInput.addEventListener('keyup', (e) => {
+  validateZipCode(e.target.value);
+});
+
 const cvvRegex = /^\d{3}$/;
 const cvvInput = document.getElementById('cvv');
 let cvvLabel = document.querySelector('label[for=cvv]');
-let validateMessageCVV = document.createElement('p');
+const validateMessageCVV = document.createElement('p');
 cvvLabel.appendChild(validateMessageCVV);
 validateMessageCVV.hidden = true;
 validateMessageCVV.textContent = `Please fill out a 3 digit number.`;
@@ -259,15 +298,50 @@ function validateCVV() {
   }
 }
 
+cvvInput.addEventListener('keyup', (e) => {
+  validateCVV(e.target.value);
+});
+
 // Overall validity check
 function formValidation() {
   if (paymentMethod.value === "credit card") {
     if (validateName() && validateEmail() && validateActivitySection() && validateCreditCardNo() && validateZipCode() && validateCVV()) {
       return true;
+    } else {
+      if (!validateName()) {
+        validateName();
+      }
+      if (!validateEmail()) {
+        validateEmail();
+      }
+      if (!validateActivitySection()) {
+        validateActivitySection();
+      }
+      if (!validateCreditCardNo()) {
+        validateCreditCardNo();
+      }
+      if (!validateZipCode()) {
+        validateZipCode();
+      }
+      if (!validateCVV()) {
+        validateCVV();
+      }
+    return false;
     }
   } else if (paymentMethod.value === "paypal" || paymentMethod.value === "bitcoin") {
     if (validateName() && validateEmail() && validateActivitySection()) {
       return true;
+    } else {
+      if (!validateName()) {
+        validateName();
+      }
+      if (!validateEmail()) {
+        validateEmail();
+      }
+      if (!validateActivitySection()) {
+        validateActivitySection();
+      }
+    return false;
     }
   } else if (paymentMethod.value === "select method") {
     validateName();
@@ -282,7 +356,7 @@ function formValidation() {
   }
 }
 
-// Submit event initiates validation 
+// Submit event initiates validation
 const form = document.querySelector('form');
 form.addEventListener('submit', () => {
   if (!formValidation()) {
