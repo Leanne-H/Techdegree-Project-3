@@ -20,6 +20,9 @@ const otherJob = document.getElementById("title");
 otherJob.addEventListener('click', () => {
   if (otherJob.value === "other") {
     otherJobInput.style.display = "block";
+    otherJobInput.addEventListener('mouseover', () => {
+      otherJobInput.focus();
+    });
   } else {
     otherJobInput.style.display = "none";
   }
@@ -36,6 +39,7 @@ colorList.hidden = true;
 const design = document.getElementById("design");
 design.addEventListener('change', () => {
   if (design.value === "js puns") {
+    selectTheme.selected = true;
     colorList.hidden = false;
     colorList[1].hidden = false;
     colorList[2].hidden = false;
@@ -44,6 +48,7 @@ design.addEventListener('change', () => {
     colorList[5].hidden = true;
     colorList[6].hidden = true;
   } else if (design.value === "heart js") {
+    selectTheme.selected = true;
     colorList.hidden = false;
     colorList[1].hidden = true;
     colorList[2].hidden = true;
@@ -160,7 +165,7 @@ nameInput.addEventListener('keyup', (e) => {
 });
 
 // 2. Email input field
-const emailRegex = /^[^@.]+\@[^.@]+\.[a-z]+$/i;
+const emailRegex = /^[^@.]+\@[^.@]+\.[a-z][a-z]+$/i;
 const emailRegexShort = /^[^@.]+$/;
 
 const emailInput = document.getElementById('mail');
@@ -361,5 +366,7 @@ const form = document.querySelector('form');
 form.addEventListener('submit', () => {
   if (!formValidation()) {
     event.preventDefault();
+  } else {
+    form.submit();
   }
 });
